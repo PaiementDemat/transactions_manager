@@ -23,6 +23,7 @@ const create = transaction => {
         })
 
         new_transaction.transaction_key = Token.createToken({
+            transaction_id: new_transaction._id,
             commercant: new_transaction.transaction_details.commercant.email,
             amount: new_transaction.transaction_details.amount
         }, '20min');
@@ -39,6 +40,34 @@ const create = transaction => {
 
 };
 
+const addCustomers = transaction => {
+
+    const transaction_id = transaction.transaction_id;
+    const customers = transaction.transaction_details.customers;
+    
+    return new Promise(async function (resolve, reject) {
+        await Transaction.findOne({
+            _id: transaction_id
+        }, (err, transaction_found) => {
+            if (err) console.error(err);
+
+            if (!transaction_found) reject({status: 'TO DO'});
+
+            else {
+                customers.forEach(customer => {
+                    transaction_found.transaction_details.customers.push(customer);
+                });
+
+                await transaction_found.save();
+
+                resolve(transaction_found);
+            }
+        })
+    });
+
+};
+
 module.exports = {
-    create
+    create,
+    addCustomers
 }
