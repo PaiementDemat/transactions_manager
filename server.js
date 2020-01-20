@@ -1,24 +1,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { MongoClient } = require('mongodb');
+const morgan = require('morgan');
 
-const { HOST, PORT } = require('./src/config/config')
+const { PORT, HOST, MONGO_URL } = require('./src/config/config')
 
-const mongoClient = require('./src/config/mongodb.js')
-const routes = require('./src/routes')
+const routes = require('./src/routes');
+const account = require('./src/routes/account.route')
 
 const app = express();
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(morgan('combined'));
 
-app.use('/transaction', routes)
+app.use('/transaction', routes);
+app.use('/account', account)
 
-app.listen(PORT, HOST, err => {
-    if (err) throw err;
+MongoClient.connect(MONGO_URL, 
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
+    function (err, client) {
+        if (err) console.error(err);
+        if (client) {
+            app.locals.db = {
+                payment: client.db()
+            }
 
-    console.log('Listening on http://' + HOST + ':' + PORT)
-})
+            app.listen(PORT, HOST, err => {
+                if (err) throw err;
+
+                console.log('Listening on http://' + HOST + ':' + PORT );
+            });
+        }
+});
 
 process.on('exit', () => {
-    mongoClient.connection.close()
+    mongoClient.close()
 })

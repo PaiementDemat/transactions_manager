@@ -9,11 +9,11 @@ router.post('/', async function (req, res) {
 
     try {
         
-        Transaction.create(req.body).then(
+        Transaction.create(req).then(
 
             transaction => res.send({
                 status: 'success',
-                transaction_key: transaction.transaction_key
+                transaction_key: transaction
             }),
     
             errors => res.send({

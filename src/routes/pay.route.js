@@ -4,10 +4,10 @@ const router = express.Router();
 
 const Transaction = require('../controllers/transaction.controller');
 
-router.post('/', async function (req, res) {
+router.get('/:transaction_key', async function (req, res) {
     try {
         
-        Transaction.addCustomers(req.body).then(
+        Transaction.pay(req).then(
 
             transaction => res.send({
                 status: 'success',

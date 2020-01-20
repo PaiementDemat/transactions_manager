@@ -10,7 +10,7 @@ module.exports = {
     HOST: process.env.HOST,
     PORT: process.env.PORT,
 
-    USERSDB_URL: process.env.USERSDB_URL,
+    MONGO_URL: process.env.MONGO_URL,
 
     JWT_SECRET: process.env.JWT_SECRET,
 }
