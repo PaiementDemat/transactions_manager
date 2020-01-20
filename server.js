@@ -17,7 +17,7 @@ app.use(morgan('combined'));
 app.use('/transaction', routes);
 app.use('/account', account);
 
-
+console.log(MONGO_URL)
 
 MongoClient.connect(MONGO_URL, 
     {

@@ -4,7 +4,7 @@ const router = express.Router();
 
 const Transaction = require('../controllers/transaction.controller');
 
-router.get('/:transaction_key', async function (req, res) {
+router.post('/', async function (req, res) {
     try {
         
         Transaction.pay(req).then(
