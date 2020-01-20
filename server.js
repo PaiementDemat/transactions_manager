@@ -15,7 +15,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(morgan('combined'));
 
 app.use('/transaction', routes);
-app.use('/account', account)
+app.use('/account', account);
+
+
 
 MongoClient.connect(MONGO_URL, 
     {
@@ -38,5 +40,5 @@ MongoClient.connect(MONGO_URL,
 });
 
 process.on('exit', () => {
-    mongoClient.close()
+    MongoClient.close()
 })
